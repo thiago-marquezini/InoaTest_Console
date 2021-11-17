@@ -26,17 +26,11 @@ namespace InoaTest_Console
 
         public void Print(APIObject.APIObjectItem Object)
         {
-            String _Symbol   = String.Format("[{0}] ", Object.symbol);
-            String _Price    = String.Format("[{0}{1}] ", Object.currency, Object.price);
-            String _Change   = String.Format("([{0}%]) ", Object.change_percent);
-            String _LastUpd  = String.Format("[{0}] ", Object.updated_at);
-            String _Action   = String.Format("> [{0}]", Object.Action);
-
-            WriteColor(_Symbol, ConsoleColor.Yellow, false);
-            WriteColor(_Price, ConsoleColor.Red, false);
-            WriteColor(_Change, (Object.change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
-            WriteColor(_LastUpd, ConsoleColor.Green, false);
-            WriteColor(_Action, ConsoleColor.Cyan, true);
+            WriteColor(String.Format("[{0}] ", Object.symbol), ConsoleColor.Yellow, false);
+            WriteColor(String.Format("[{0}{1}] ", Object.currency, Object.price), ConsoleColor.Red, false);
+            WriteColor(String.Format("([{0}%]) ", Object.change_percent), (Object.change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
+            WriteColor(String.Format("[{0}] ", Object.updated_at), ConsoleColor.Green, false);
+            WriteColor(String.Format("> [{0}]", Object.Action), ConsoleColor.Cyan, true);
         }
     }
 }
