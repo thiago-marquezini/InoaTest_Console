@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "blGgMW4DZZZj0M1wSSO1yJxs/nY6TJEJq2s1PEAAFPYVz13FMyloDfS2utGQ2//gGcCjL4WBusUXtE4y7fuauQ==",
+  "dgSpecHash": "ZH2y0Qrsm1mr/eZleYmtGvsJPSfkNgc9KoM3XhoUbeATf8wA/i1SCREbMf+1V/TjZaYjmQ29ykLopLaV7OAmJg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Thiago\\Desktop\\InoaTest\\InoaTest\\InoaTest_Console.csproj",
+  "projectFilePath": "C:\\Users\\Thiago\\Desktop\\InoaTest\\InoaTest_Console\\InoaTest_Console.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Thiago\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",
     "C:\\Users\\Thiago\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",

@@ -14,18 +14,9 @@ namespace InoaTest_Console
             this.refsell = RefSell; 
             this.refbuy  = RefBuy; 
         }
-        public string Symbol 
-        { 
-            get { return symbol; } 
-        }
-        public double RefSell 
-        { 
-            get { return refsell; } 
-        }
-        public double RefBuy 
-        { 
-            get { return refbuy; } 
-        }
+        public string Symbol { get { return symbol; } }
+        public double RefSell { get { return refsell; } }
+        public double RefBuy {  get { return refbuy; }  }
     }
 
     public interface IAbstractSymbols
