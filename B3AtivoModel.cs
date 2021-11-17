@@ -35,15 +35,15 @@ namespace InoaTest_Console
         private double RefSell = 0.00;
         private double RefBuy  = 0.00;
 
-        public B3AtivoModel(string Symbol, double RefSell, double RefBuy)
+        public B3AtivoModel(string RefSymbol, double RefSell, double RefBuy)
         {
-            this.Symbol  = Symbol;
+            this.Symbol  = RefSymbol;
             this.RefSell = RefSell;
             this.RefBuy  = RefBuy;
 
-            this.Client  = new RestClient(this.BaseAPI);
-            this.Request = new RestRequest(this.APIRes + this.Symbol);
-            this.Mail    = new B3AtivoMail("appsettings.json", "MailSettings");
+            Client  = new RestClient(BaseAPI);
+            Request = new RestRequest(APIRes + Symbol);
+            Mail    = new B3AtivoMail("appsettings.json", "MailSettings");
         }
 
         public void RESTWork(ref B3AtivoView pView)
@@ -52,18 +52,18 @@ namespace InoaTest_Console
             {
                 IRestResponse RESTResponse = Client.Get(Request);
                 APIObject Object = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content);
-                if (Object.results.ContainsKey(this.Symbol))
+                if (Object.results.ContainsKey(Symbol))
                 {
-                    Object.results[this.Symbol].Action = ((Object.results[this.Symbol].price > this.RefSell) ? B3AtivoAction.Vender : (Object.results[this.Symbol].price < this.RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
-                    pView.Print(Object.results[this.Symbol]);
+                    Object.results[Symbol].Action = ((Object.results[Symbol].price > RefSell) ? B3AtivoAction.Vender : (Object.results[Symbol].price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
+                    pView.Print(Object.results[Symbol]);
 
-                    switch (Object.results[this.Symbol].Action)
+                    switch (Object.results[Symbol].Action)
                     {
                         case B3AtivoAction.Vender:
-                            this.Mail.Send("Recomendação de Venda", String.Format("Recomendamos a venda do ativo {0} ({1}{2})", this.Symbol, Object.results[this.Symbol].currency, Object.results[this.Symbol].price));
+                            Mail.Send("Recomendação de Venda", String.Format("Recomendamos a venda do ativo {0} ({1}{2})", Symbol, Object.results[Symbol].currency, Object.results[Symbol].price));
                             break;
                         case B3AtivoAction.Comprar:
-                            this.Mail.Send("Recomendação de Compra", String.Format("Recomendamos a compra do ativo {0} ({1}{2})", this.Symbol, Object.results[this.Symbol].currency, Object.results[this.Symbol].price));
+                            Mail.Send("Recomendação de Compra", String.Format("Recomendamos a compra do ativo {0} ({1}{2})", Symbol, Object.results[Symbol].currency, Object.results[Symbol].price));
                             break;
                         default: 
                             break;
