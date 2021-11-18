@@ -20,7 +20,8 @@ namespace InoaTest_Console
         }
 
         public Dictionary<string, APIObjectItem> results { get; set; }
-        public double execution_time { get; set; }
+        private static S ProtoSymbol<S>(S Source) { return (Source is null) ? default : JsonSerializer.Deserialize<S>(JsonSerializer.Serialize(Source)); }
+        public APIObjectItem GetSymbol(string Symbol) { return ProtoSymbol(results[Symbol]); }
     }
 
     public interface IB3AtivoModel
@@ -57,20 +58,21 @@ namespace InoaTest_Console
             try
             {
                 IRestResponse RESTResponse = Client.Get(Request);
-                APIObject Object = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content);
+                APIObject.APIObjectItem ObjectItem = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content).GetSymbol(Symbol);
 
-                if (Object.results.ContainsKey(Symbol))
+                if (!(ObjectItem is null))
                 {
-                    Object.results[Symbol].Action = ((Object.results[Symbol].price > RefSell) ? B3AtivoAction.Vender : (Object.results[Symbol].price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
-                    pView.Print(Object, Symbol);
+                    ObjectItem.Action = ((ObjectItem.price > RefSell) ? B3AtivoAction.Vender : (ObjectItem.price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
+                    
+                    pView.Print(ObjectItem);
 
-                    switch (Object.results[Symbol].Action)
+                    switch (ObjectItem.Action)
                     {
                         case B3AtivoAction.Vender:
-                            Mail.Send("Recomendação de Venda", String.Format("Recomendamos a venda do ativo {0} ({1}{2})", Symbol, Object.results[Symbol].currency, Object.results[Symbol].price));
+                            Mail.Send("Recomendação de Venda", string.Format("Recomendamos a venda do ativo {0} ({1}{2})", Symbol, ObjectItem.currency, ObjectItem.price));
                             break;
                         case B3AtivoAction.Comprar:
-                            Mail.Send("Recomendação de Compra", String.Format("Recomendamos a compra do ativo {0} ({1}{2})", Symbol, Object.results[Symbol].currency, Object.results[Symbol].price));
+                            Mail.Send("Recomendação de Compra", string.Format("Recomendamos a compra do ativo {0} ({1}{2})", Symbol, ObjectItem.currency, ObjectItem.price));
                             break;
                         default: 
                             break;

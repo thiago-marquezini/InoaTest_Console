@@ -10,7 +10,7 @@ namespace InoaTest_Console
         static void Main(string[] args)
         {
             B3AtivosMonitor = new B3AtivoController();
-
+            
             try
             {
                 if ((args.Length % SymbolArgCount) == 0)

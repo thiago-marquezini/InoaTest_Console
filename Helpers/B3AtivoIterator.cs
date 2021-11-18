@@ -59,14 +59,14 @@ namespace InoaTest_Console
         public SymbolArgs First()
         {
             Index = 0;
-            return ArgCollection[Index] as SymbolArgs;
+            return ArgCollection[Index];
         }
 
         public SymbolArgs Next()
         {
             Index++;
             if (!Finished)
-                return ArgCollection[Index] as SymbolArgs;
+                return ArgCollection[Index];
             else
                 return null;
         }
