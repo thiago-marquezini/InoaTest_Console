@@ -46,7 +46,9 @@ namespace InoaTest_Console
                     SymbolIterator.First();
                     while (!SymbolIterator.Finished)
                     {
-                        SymbolModel[SymbolIterator.Index].RESTWork(ref SymbolView);
+                        SymbolModel[SymbolIterator.Index].RESTWork();
+                        SymbolModel[SymbolIterator.Index].RESTDisplay(ref SymbolView);
+
                         SymbolIterator.Next();
                     }
 

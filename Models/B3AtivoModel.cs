@@ -26,7 +26,8 @@ namespace InoaTest_Console
 
     public interface IB3AtivoModel
     {
-        void RESTWork(ref B3AtivoView pView);
+        void RESTWork();
+        void RESTDisplay(ref B3AtivoView pView);
     }
 
     public class B3AtivoModel : IB3AtivoModel
@@ -34,6 +35,8 @@ namespace InoaTest_Console
         private RestClient  Client;
         private RestRequest Request;
         private B3AtivoMail Mail;
+
+        private APIObject.APIObjectItem ObjectItem;
 
         private readonly string BaseAPI = "https://api.hgbrasil.com/finance/";
         private readonly string APIRes  = "stock_price?key=679d092c&symbol=";
@@ -53,18 +56,16 @@ namespace InoaTest_Console
             Mail    = new B3AtivoMail("appsettings.json", "MailSettings");
         }
 
-        public void RESTWork(ref B3AtivoView pView)
+        public void RESTWork()
         {
             try
             {
                 IRestResponse RESTResponse = Client.Get(Request);
-                APIObject.APIObjectItem ObjectItem = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content).GetSymbol(Symbol);
 
+                ObjectItem = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content).GetSymbol(Symbol);
                 if (!(ObjectItem is null))
                 {
                     ObjectItem.Action = ((ObjectItem.price > RefSell) ? B3AtivoAction.Vender : (ObjectItem.price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
-                    
-                    pView.Print(ObjectItem);
 
                     switch (ObjectItem.Action)
                     {
@@ -77,12 +78,18 @@ namespace InoaTest_Console
                         default: 
                             break;
                     }
-                }
+
+                } else { throw new ArgumentException("Invalid symbol object"); }
 
             } catch (Exception E)
             {
                throw new ArgumentException(E.Message);
             }
+        }
+
+        public void RESTDisplay(ref B3AtivoView pView)
+        {
+            pView.Print(ObjectItem);
         }
     }
 }
