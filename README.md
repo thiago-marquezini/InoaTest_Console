@@ -9,4 +9,5 @@ Features:
 External requeriments:
 - RestSharp (for simple REST API calls)
 
-Email configuration file: bin\Release\netcoreapp3.1\appsettings.json
+> Email configuration file: bin\Release\netcoreapp3.1\appsettings.json
+> Chosen API: hgbrasil (free limited plan)
