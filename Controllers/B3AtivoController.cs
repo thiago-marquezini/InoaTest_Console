@@ -18,9 +18,9 @@ namespace InoaTest_Console
 
         public void Run()
         {
-            AtivoIterator = SymbolCollection.SetupIterator();
             pModel = new B3AtivoModel[SymbolCollection.Count];
 
+            AtivoIterator = SymbolCollection.SetupIterator();
             for (AtivoArgs Arg = AtivoIterator.First(); !AtivoIterator.Finished; Arg = AtivoIterator.Next())
             {
                 pModel[AtivoIterator.Index] = new B3AtivoModel(Arg.Symbol, Arg.RefSell, Arg.RefBuy);
