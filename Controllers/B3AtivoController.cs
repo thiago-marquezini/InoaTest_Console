@@ -11,7 +11,7 @@ namespace InoaTest_Console
 
     public class B3AtivoController : IB3AtivoController
     {
-        private const int CheckInterval = 1; /* Intervalo de atualizacao em minuto(s) */
+        private const int CheckInterval = 5; /* Intervalo de atualizacao em segundos(s) */
 
         private static B3AtivoView    SymbolView;
         private static B3AtivoModel[] SymbolModel;
@@ -55,7 +55,7 @@ namespace InoaTest_Console
                     throw new ArgumentException(E.Message);
                 }
 
-                Thread.Sleep(CheckInterval * 60000);
+                Thread.Sleep(CheckInterval * 1000);
             }
         }
     }

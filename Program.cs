@@ -25,11 +25,6 @@ namespace InoaTest_Console
                          
                         B3AtivosMonitor.AddSymbol(Symbol, RefSell, RefBuy);
                     }
-
-                } else
-                {
-                    Console.WriteLine("[ ERRO ] Argumentos invalidos! Uso: InoaTest_Console.exe [ATIVO0 VENDA0 COMPRA0 ATIVO1 VENDA1 COMPRA1 ...]");
-                    Environment.Exit(0);
                 }
 
                 B3AtivosMonitor.Run();
