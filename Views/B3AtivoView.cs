@@ -6,7 +6,7 @@ namespace InoaTest_Console
     public interface IB3AtivoView
     {
         void WriteColor(string message, ConsoleColor color, bool linebreak);
-        void Print(APIObject.APIObjectItem Object);
+        void Print(APIObject Object, string Symbol);
     }
 
     public class B3AtivoView : IB3AtivoView
@@ -30,13 +30,14 @@ namespace InoaTest_Console
             Console.WriteLine();
         }
 
-        public void Print(APIObject.APIObjectItem Object)
+        public void Print(APIObject Object, string Symbol)
         {
-            WriteColor(String.Format("[{0}] ", Object.symbol), ConsoleColor.Yellow, false);
-            WriteColor(String.Format("[{0}{1}] ", Object.currency, Object.price), ConsoleColor.Red, false);
-            WriteColor(String.Format("([{0}%]) ", Object.change_percent), (Object.change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
-            WriteColor(String.Format("[{0}] ", Object.updated_at), ConsoleColor.Green, false);
-            WriteColor(String.Format("> [{0}]", Object.Action), ConsoleColor.Cyan, true);
+            WriteColor(String.Format("[{0}] ", Object.results[Symbol].symbol), ConsoleColor.Yellow, false);
+            WriteColor(String.Format("[{0}{1}] ", Object.results[Symbol].currency, Object.results[Symbol].price), ConsoleColor.Red, false);
+            WriteColor(String.Format("([{0}%]) ", Object.results[Symbol].change_percent), (Object.results[Symbol].change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
+            WriteColor(String.Format("[{0}] ", Object.results[Symbol].updated_at), ConsoleColor.Green, false);
+            WriteColor(String.Format("> [{0}] ", Object.results[Symbol].Action), ConsoleColor.Cyan, false);
+            WriteColor(String.Format("([{0}ms])", Object.execution_time), ConsoleColor.Cyan, true);
         }
     }
 }

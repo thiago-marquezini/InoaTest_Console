@@ -20,6 +20,7 @@ namespace InoaTest_Console
         }
 
         public Dictionary<string, APIObjectItem> results { get; set; }
+        public double execution_time { get; set; }
     }
 
     public interface IB3AtivoModel
@@ -61,7 +62,7 @@ namespace InoaTest_Console
                 if (Object.results.ContainsKey(Symbol))
                 {
                     Object.results[Symbol].Action = ((Object.results[Symbol].price > RefSell) ? B3AtivoAction.Vender : (Object.results[Symbol].price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
-                    pView.Print(Object.results[Symbol]);
+                    pView.Print(Object, Symbol);
 
                     switch (Object.results[Symbol].Action)
                     {
