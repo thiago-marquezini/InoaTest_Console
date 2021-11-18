@@ -15,3 +15,5 @@ External requeriments:
 - RestSharp (for simple REST API calls)
 
 > Email configuration file: bin\Release\netcoreapp3.1\appsettings.json
+
+![Screenshot](https://i.ibb.co/qRQQXrW/Screenshot-1.png)
