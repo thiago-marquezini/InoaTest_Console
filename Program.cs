@@ -5,10 +5,12 @@ namespace InoaTest_Console
     class Program
     {
         private static int SymbolArgCount = 3; /* Argumentos (command-line) por ativo */
-        private static B3AtivoController B3AtivosMonitor = new B3AtivoController();
+        private static B3AtivoController B3AtivosMonitor;
 
         static void Main(string[] args)
         {
+            B3AtivosMonitor = new B3AtivoController();
+
             try
             {
                 if ((args.Length % SymbolArgCount) == 0)

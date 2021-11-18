@@ -3,10 +3,16 @@ using System.Text.RegularExpressions;
 
 namespace InoaTest_Console
 {
-    class B3AtivoView
+    public interface IB3AtivoView
+    {
+        void WriteColor(string message, ConsoleColor color, bool linebreak);
+        void Print(APIObject.APIObjectItem Object);
+    }
+
+    public class B3AtivoView : IB3AtivoView
     {
         /* Fonte WriteColor(): https://stackoverflow.com/a/60492990 */
-        static void WriteColor(string message, ConsoleColor color, bool linebreak)
+        public void WriteColor(string message, ConsoleColor color, bool linebreak)
         {
             var pieces = Regex.Split(message, @"(\[[^\]]*\])");
             for (int i = 0; i < pieces.Length; i++)

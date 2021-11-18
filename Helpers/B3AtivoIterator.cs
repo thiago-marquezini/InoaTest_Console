@@ -2,13 +2,13 @@
 
 namespace InoaTest_Console
 {
-    public class AtivoArgs
+    public class SymbolArgs
     {
         string symbol;
         double refsell;
         double refbuy;
 
-        public AtivoArgs(string Symbol, double RefSell, double RefBuy) 
+        public SymbolArgs(string Symbol, double RefSell, double RefBuy) 
         { 
             this.symbol  = Symbol; 
             this.refsell = RefSell; 
@@ -26,10 +26,10 @@ namespace InoaTest_Console
 
     public class Collection : IAbstractSymbols
     {
-        List<AtivoArgs> Args = new List<AtivoArgs>();
+        List<SymbolArgs> Args = new List<SymbolArgs>();
         public Iterator SetupIterator() { return new Iterator(this); }
         public int Count { get { return Args.Count; } }
-        public AtivoArgs this[int Index] 
+        public SymbolArgs this[int Index] 
         {
             get { return Args[Index]; } 
             set { Args.Add(value); } 
@@ -38,8 +38,8 @@ namespace InoaTest_Console
 
     public interface IAbstractIterator
     {
-        AtivoArgs First();
-        AtivoArgs Next();
+        SymbolArgs First();
+        SymbolArgs Next();
         bool Finished { get; }
         int Index { get; set; }
     }
@@ -56,17 +56,17 @@ namespace InoaTest_Console
             this.ArgCollection = ArgCollection;
         }
 
-        public AtivoArgs First()
+        public SymbolArgs First()
         {
             Index = 0;
-            return ArgCollection[Index] as AtivoArgs;
+            return ArgCollection[Index] as SymbolArgs;
         }
 
-        public AtivoArgs Next()
+        public SymbolArgs Next()
         {
             Index++;
             if (!Finished)
-                return ArgCollection[Index] as AtivoArgs;
+                return ArgCollection[Index] as SymbolArgs;
             else
                 return null;
         }

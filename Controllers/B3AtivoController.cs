@@ -3,38 +3,51 @@ using System.Threading;
 
 namespace InoaTest_Console
 {
-    class B3AtivoController
+    public interface IB3AtivoController
     {
-        private static int CheckInterval = 1; /* Intervalo de atualizacao em minuto(s) */
-        private static Collection SymbolCollection = new Collection();
-        private static Iterator AtivoIterator;
-        private static B3AtivoView  pView = new B3AtivoView();
-        private static B3AtivoModel[] pModel;
+        void AddSymbol(string Symbol, double RefSell, double RefBuy);
+        void Run();
+    }
+
+    public class B3AtivoController : IB3AtivoController
+    {
+        private const int CheckInterval = 1; /* Intervalo de atualizacao em minuto(s) */
+
+        private static B3AtivoView    SymbolView;
+        private static B3AtivoModel[] SymbolModel;
+        private static Collection     SymbolCollection;
+        private static Iterator       SymbolIterator;
+
+        public B3AtivoController()
+        {
+            SymbolCollection = new Collection();
+            SymbolView       = new B3AtivoView();
+        }
 
         public void AddSymbol(string Symbol, double RefSell, double RefBuy)
         {
-            SymbolCollection[SymbolCollection.Count] = new AtivoArgs(Symbol, RefSell, RefBuy);
+            SymbolCollection[SymbolCollection.Count] = new SymbolArgs(Symbol, RefSell, RefBuy);
         }
 
         public void Run()
         {
-            pModel = new B3AtivoModel[SymbolCollection.Count];
+            SymbolModel    = new B3AtivoModel[SymbolCollection.Count];
+            SymbolIterator = SymbolCollection.SetupIterator();
 
-            AtivoIterator = SymbolCollection.SetupIterator();
-            for (AtivoArgs Arg = AtivoIterator.First(); !AtivoIterator.Finished; Arg = AtivoIterator.Next())
+            for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
             {
-                pModel[AtivoIterator.Index] = new B3AtivoModel(Arg.Symbol, Arg.RefSell, Arg.RefBuy);
+                SymbolModel[SymbolIterator.Index] = new B3AtivoModel(Arg.Symbol, Arg.RefSell, Arg.RefBuy);
             }
 
             while (true)
             {
                 try
                 {
-                    AtivoIterator.First();
-                    while (!AtivoIterator.Finished)
+                    SymbolIterator.First();
+                    while (!SymbolIterator.Finished)
                     {
-                        pModel[AtivoIterator.Index].RESTWork(ref pView);
-                        AtivoIterator.Next();
+                        SymbolModel[SymbolIterator.Index].RESTWork(ref SymbolView);
+                        SymbolIterator.Next();
                     }
 
                 } catch (Exception E)

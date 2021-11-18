@@ -22,7 +22,12 @@ namespace InoaTest_Console
         public Dictionary<string, APIObjectItem> results { get; set; }
     }
 
-    class B3AtivoModel
+    public interface IB3AtivoModel
+    {
+        void RESTWork(ref B3AtivoView pView);
+    }
+
+    public class B3AtivoModel : IB3AtivoModel
     {
         private RestClient  Client;
         private RestRequest Request;
