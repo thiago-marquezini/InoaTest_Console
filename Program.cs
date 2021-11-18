@@ -17,21 +17,24 @@ namespace InoaTest_Console
                     {
                         int SymbolIndex = I * SymbolArgCount;
 
-                        string Symbol = args[SymbolIndex];
+                        string Symbol  = args[SymbolIndex];
                         double RefSell = double.Parse(args[SymbolIndex + 1], System.Globalization.CultureInfo.InvariantCulture);
-                        double RefBuy = double.Parse(args[SymbolIndex + 2], System.Globalization.CultureInfo.InvariantCulture);
-
+                        double RefBuy  = double.Parse(args[SymbolIndex + 2], System.Globalization.CultureInfo.InvariantCulture);
+                         
                         B3AtivosMonitor.AddSymbol(Symbol, RefSell, RefBuy);
                     }
+
+                } else
+                {
+                    Console.WriteLine("[ ERRO ] Argumentos invalidos! Uso: InoaTest_Console.exe [ATIVO0 VENDA0 COMPRA0 ATIVO1 VENDA1 COMPRA1 ...]");
+                    Environment.Exit(0);
                 }
 
                 B3AtivosMonitor.Run();
 
-            }
-            catch
+            } catch (Exception E)
             {
-                Console.WriteLine("[ ERRO ] Argumentos invalidos! Uso: InoaTest_Console.exe [ATIVO0 VENDA0 COMPRA0 ATIVO1 VENDA1 COMPRA1 ...]");
-                Environment.Exit(0);
+                Console.WriteLine("Erro: {0}", E.Message);
             }
         }
     }

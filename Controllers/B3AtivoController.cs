@@ -19,6 +19,7 @@ namespace InoaTest_Console
         public void Run()
         {
             AtivoIterator = SymbolCollection.SetupIterator();
+            pModel = new B3AtivoModel[SymbolCollection.Count];
 
             for (AtivoArgs Arg = AtivoIterator.First(); !AtivoIterator.Finished; Arg = AtivoIterator.Next())
             {
@@ -38,7 +39,7 @@ namespace InoaTest_Console
 
                 } catch (Exception E)
                 {
-                    Console.WriteLine("Erro: {0}", E.Message);
+                    throw new ArgumentException(E.Message);
                 }
 
                 Thread.Sleep(CheckInterval * 60000);

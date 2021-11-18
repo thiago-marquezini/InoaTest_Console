@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 
@@ -26,21 +27,26 @@ namespace InoaTest_Console
             this.Section  = Section;
         }
 
-        public bool Send(string Title, string Message)
+        public void Send(string Title, string Message)
         {
-            IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile(this.Settings, optional: false, reloadOnChange: true).Build();
-            Configuration.GetSection(this.Section).Bind(SMTP);
-
-            var SMTPClient = new SmtpClient(SMTP.SMTPHost)
+            try
             {
-                Port = SMTP.SMTPPort,
-                Credentials = new NetworkCredential(SMTP.SMTPUser, SMTP.SMTPPass),
-                EnableSsl = SMTP.SMTPSSL
-            };
+                IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile(Settings, optional: false, reloadOnChange: true).Build();
+                Configuration.GetSection(Section).Bind(SMTP);
 
-            SMTPClient.Send(SMTP.SMTPUser, SMTP.Destinatario, Title, Message);
+                var SMTPClient = new SmtpClient(SMTP.SMTPHost)
+                {
+                    Port = SMTP.SMTPPort,
+                    Credentials = new NetworkCredential(SMTP.SMTPUser, SMTP.SMTPPass),
+                    EnableSsl = SMTP.SMTPSSL
+                };
 
-            return true;
+                SMTPClient.Send(SMTP.SMTPUser, SMTP.Destinatario, Title, Message);
+
+            } catch (Exception E)
+            {
+                throw new ArgumentException(E.Message);
+            }
         }
     }
 }

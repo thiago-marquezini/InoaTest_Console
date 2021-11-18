@@ -52,6 +52,7 @@ namespace InoaTest_Console
             {
                 IRestResponse RESTResponse = Client.Get(Request);
                 APIObject Object = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content);
+
                 if (Object.results.ContainsKey(Symbol))
                 {
                     Object.results[Symbol].Action = ((Object.results[Symbol].price > RefSell) ? B3AtivoAction.Vender : (Object.results[Symbol].price < RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
