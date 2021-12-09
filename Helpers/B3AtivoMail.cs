@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 
-namespace InoaTest_Console
+namespace InoaTest_Console.Helpers
 {
     class SMTPSettings
     {

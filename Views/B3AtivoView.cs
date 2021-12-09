@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using InoaTest_Console.Models;
 
-namespace InoaTest_Console
+namespace InoaTest_Console.Views
 {
-    public interface IB3AtivoView
+    interface IB3AtivoView
     {
         void WriteColor(string message, ConsoleColor color, bool linebreak);
-        void Print(APIObject.APIObjectItem Object);
+        void Print(APIObjectItem Object);
     }
 
-    public class B3AtivoView : IB3AtivoView
+    class B3AtivoView : IB3AtivoView
     {
         /* Fonte WriteColor(): https://stackoverflow.com/a/60492990 */
         public void WriteColor(string message, ConsoleColor color, bool linebreak)
@@ -30,7 +31,7 @@ namespace InoaTest_Console
             Console.WriteLine();
         }
 
-        public void Print(APIObject.APIObjectItem Object)
+        public void Print(APIObjectItem Object)
         {
             WriteColor(string.Format("[{0}] ", Object.symbol), ConsoleColor.Yellow, false);
             WriteColor(string.Format("[{0}{1}] ", Object.currency, Object.price), ConsoleColor.Red, false);

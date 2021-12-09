@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace InoaTest_Console
+namespace InoaTest_Console.Helpers
 {
-    public class SymbolArgs
+    class SymbolArgs
     {
         string symbol;
         double refsell;
@@ -14,21 +14,42 @@ namespace InoaTest_Console
             this.refsell = RefSell; 
             this.refbuy  = RefBuy; 
         }
-        public string Symbol { get { return symbol; } }
-        public double RefSell { get { return refsell; } }
-        public double RefBuy {  get { return refbuy; }  }
+
+        public string Symbol 
+        { 
+            get { return symbol; } 
+        }
+
+        public double RefSell 
+        { 
+            get { return refsell; } 
+        }
+
+        public double RefBuy 
+        {  
+            get { return refbuy; }  
+        }
     }
 
-    public interface IAbstractSymbols
+    interface IAbstractSymbols
     {
         Iterator SetupIterator();
     }
 
-    public class Collection : IAbstractSymbols
+    class Collection : IAbstractSymbols
     {
         List<SymbolArgs> Args = new List<SymbolArgs>();
-        public Iterator SetupIterator() { return new Iterator(this); }
-        public int Count { get { return Args.Count; } }
+
+        public Iterator SetupIterator() 
+        { 
+            return new Iterator(this); 
+        }
+
+        public int Count 
+        { 
+            get { return Args.Count; } 
+        }
+
         public SymbolArgs this[int Index] 
         {
             get { return Args[Index]; } 
@@ -36,20 +57,36 @@ namespace InoaTest_Console
         }
     }
 
-    public interface IAbstractIterator
+    interface IAbstractIterator
     {
         SymbolArgs First();
+
         SymbolArgs Next();
-        bool Finished { get; }
-        int Index { get; set; }
+
+        bool Finished 
+        { 
+            get; 
+        }
+
+        int Index 
+        { 
+            get; set; 
+        }
     }
 
-    public class Iterator : IAbstractIterator
+    class Iterator : IAbstractIterator
     {
         Collection ArgCollection;
 
-        public int Index { get; set; }
-        public bool Finished { get { return Index >= ArgCollection.Count; } }
+        public int Index 
+        { 
+            get; set; 
+        }
+
+        public bool Finished 
+        { 
+            get { return Index >= ArgCollection.Count; } 
+        }
 
         public Iterator(Collection ArgCollection)
         {

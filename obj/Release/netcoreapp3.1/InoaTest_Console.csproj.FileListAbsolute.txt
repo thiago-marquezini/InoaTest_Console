@@ -58,4 +58,3 @@ C:\Users\Thiago\Desktop\InoaTest\InoaTest_Console\obj\Release\netcoreapp3.1\Inoa
 C:\Users\Thiago\Desktop\InoaTest\InoaTest_Console\obj\Release\netcoreapp3.1\InoaTest_Console.dll
 C:\Users\Thiago\Desktop\InoaTest\InoaTest_Console\obj\Release\netcoreapp3.1\InoaTest_Console.pdb
 C:\Users\Thiago\Desktop\InoaTest\InoaTest_Console\obj\Release\netcoreapp3.1\InoaTest_Console.genruntimeconfig.cache
-C:\Users\Thiago\Desktop\InoaTest\InoaTest_Console\obj\Release\netcoreapp3.1\InoaTest_Console.csproj.AssemblyReference.cache

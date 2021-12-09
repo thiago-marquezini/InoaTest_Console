@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Threading;
+using InoaTest_Console.Models;
+using InoaTest_Console.Views;
+using InoaTest_Console.Helpers;
 
-namespace InoaTest_Console
+namespace InoaTest_Console.Controllers
 {
-    public interface IB3AtivoController
+    interface IB3AtivoController
     {
-        void AddSymbol(string Symbol, double RefSell, double RefBuy);
+        void AddSymbol(ref SymbolArgs SArgs);
         void Run();
     }
 
-    public class B3AtivoController : IB3AtivoController
+    class B3AtivoController : IB3AtivoController, IDisposable
     {
-        private const int CheckInterval = 5; /* Intervalo de atualizacao em segundos(s) */
+        private int CheckInterval = 5; /* Intervalo de atualizacao em segundos(s) */
 
         private static B3AtivoView    SymbolView;
-        private static B3AtivoModel[] SymbolModel;
+        private static B3AtivoMail    Mail;
         private static Collection     SymbolCollection;
         private static Iterator       SymbolIterator;
 
@@ -22,43 +25,56 @@ namespace InoaTest_Console
         {
             SymbolCollection = new Collection();
             SymbolView       = new B3AtivoView();
+            Mail             = new B3AtivoMail("appsettings.json", "MailSettings");
         }
 
-        public void AddSymbol(string Symbol, double RefSell, double RefBuy)
+        ~B3AtivoController()
         {
-            SymbolCollection[SymbolCollection.Count] = new SymbolArgs(Symbol, RefSell, RefBuy);
+            Dispose();
+        }
+
+        public void AddSymbol(ref SymbolArgs SArgs)
+        {
+            SymbolCollection[SymbolCollection.Count] = new SymbolArgs(SArgs.Symbol, SArgs.RefSell, SArgs.RefBuy);
         }
 
         public void Run()
         {
-            SymbolModel    = new B3AtivoModel[SymbolCollection.Count];
             SymbolIterator = SymbolCollection.SetupIterator();
-
-            for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
-            {
-                SymbolModel[SymbolIterator.Index] = new B3AtivoModel(Arg.Symbol, Arg.RefSell, Arg.RefBuy);
-            }
 
             while (true)
             {
-                try
+                for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
                 {
-                    SymbolIterator.First();
-                    while (!SymbolIterator.Finished)
+                    try
                     {
-                        SymbolModel[SymbolIterator.Index].RESTWork();
-                        SymbolModel[SymbolIterator.Index].RESTDisplay(ref SymbolView);
+                        B3AtivoModel SBM = new B3AtivoModel(ref Arg, ref Mail);
 
-                        SymbolIterator.Next();
+                        SBM.RESTWork();
+                        SBM.RESTDisplay(ref SymbolView);
+
+                        SBM.Dispose();
+
+                    } catch (Exception E)
+                    {
+                        throw new ArgumentException("Controller: " + E.Message);
                     }
-
-                } catch (Exception E)
-                {
-                    throw new ArgumentException(E.Message);
                 }
 
                 Thread.Sleep(CheckInterval * 1000);
             }
+        }
+
+        public void Dispose()
+        {
+            CheckInterval = 0;
+
+            SymbolView       = null;
+            Mail             = null;
+            SymbolCollection = null;
+            SymbolIterator   = null;
+
+            GC.SuppressFinalize(this);
         }
     }
 }
