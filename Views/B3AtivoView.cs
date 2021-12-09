@@ -38,12 +38,12 @@ namespace InoaTest_Console.Views
             WriteColor(string.Format("[{0}{1}] ", Object.currency, Object.price), ConsoleColor.Red, false);
             WriteColor(string.Format("([{0}%]) ", Object.change_percent), (Object.change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
             WriteColor(string.Format("[{0}] ", Object.updated_at), ConsoleColor.Green, false);
-            WriteColor(string.Format("> [{0}]", Object.Action), ConsoleColor.Cyan, true);
+            WriteColor(string.Format("> [{0}]", Object.Action), ConsoleColor.Cyan, false);
         }
 
         public void WriteText(string Text)
         {
-            WriteColor(string.Format("[{0}] ", Text), ConsoleColor.Magenta, true);
+            WriteColor(string.Format(" ~> [{0}] ", Text), ConsoleColor.Magenta, true);
         }
     }
 }

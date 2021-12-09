@@ -33,14 +33,14 @@ namespace InoaTest_Console.Controllers
         public void Run()
         {
             SymbolIterator = SymbolCollection.SetupIterator();
-            
+
             for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
             {
                 try
                 {
                     B3AtivoModel SymbolModel = new B3AtivoModel(ref Arg, ref SymbolMail, ref SymbolView);
 
-                    SymbolModel.RESTWork();
+                    SymbolModel.APIRequest();
                     SymbolModel.Dispose();
 
                 } catch (Exception E)
@@ -48,12 +48,11 @@ namespace InoaTest_Console.Controllers
                     throw new ArgumentException("Controller: " + E.Message);
                 }
             }
-            
         }
 
         public void Dispose()
         {
-            SymbolView.WriteText("Disposing B3AtivoController..");
+            SymbolView.WriteText("Disposing B3AtivoController.");
 
             SymbolView       = null;
             SymbolMail       = null;

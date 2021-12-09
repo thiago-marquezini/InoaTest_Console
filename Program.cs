@@ -24,7 +24,7 @@ namespace InoaTest_Console
         static void Main(string[] args)
         {
             B3AtivosMonitor = new B3AtivoController();
-            
+
             try
             {
                 if ((args.Length % SymbolArgCount) == 0)
@@ -43,7 +43,12 @@ namespace InoaTest_Console
 
                 while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
                 {
+                    Console.Clear();
+                    Console.WriteLine("[ ! ] Pressione ESC p/ interromper o loop do controlador.");
+                    Console.WriteLine();
+
                     B3AtivosMonitor.Run();
+
                     Thread.Sleep(CheckInterval * 1000);
                 }
                 
