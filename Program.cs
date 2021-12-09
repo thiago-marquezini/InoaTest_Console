@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Diagnostics;
 using InoaTest_Console.Controllers;
 using InoaTest_Console.Helpers;
 
@@ -15,6 +16,7 @@ namespace InoaTest_Console
         - não blindado                                        [  Ok? ]
         - sem dispose                                         [  Ok? ]
     */
+
     class Program
     {
         private static int CheckInterval  = 5; /* Intervalo entre verificacoes (em segundos) */
@@ -43,11 +45,16 @@ namespace InoaTest_Console
 
                 while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
                 {
+
                     Console.Clear();
                     Console.WriteLine("[ ! ] Pressione ESC p/ interromper o loop do controlador.");
                     Console.WriteLine();
 
                     B3AtivosMonitor.Run();
+
+                    Process cProcess  = Process.GetCurrentProcess();
+                    float cProcPvtMem = (cProcess.PrivateMemorySize64 / 1024f) / 1024f;
+                    Console.Title     = "InoaTest - RAM Usage: " + cProcPvtMem.ToString("0.00") + "MB";
 
                     Thread.Sleep(CheckInterval * 1000);
                 }
