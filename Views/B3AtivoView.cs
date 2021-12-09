@@ -8,6 +8,7 @@ namespace InoaTest_Console.Views
     {
         void WriteColor(string message, ConsoleColor color, bool linebreak);
         void Print(APIObjectItem Object);
+        void WriteText(string Text);
     }
 
     class B3AtivoView : IB3AtivoView
@@ -28,7 +29,7 @@ namespace InoaTest_Console.Views
                 Console.ResetColor();
             }
             if (linebreak)
-            Console.WriteLine();
+                Console.WriteLine();
         }
 
         public void Print(APIObjectItem Object)
@@ -38,6 +39,11 @@ namespace InoaTest_Console.Views
             WriteColor(string.Format("([{0}%]) ", Object.change_percent), (Object.change_percent > 0) ? ConsoleColor.Blue : ConsoleColor.Red, false);
             WriteColor(string.Format("[{0}] ", Object.updated_at), ConsoleColor.Green, false);
             WriteColor(string.Format("> [{0}]", Object.Action), ConsoleColor.Cyan, true);
+        }
+
+        public void WriteText(string Text)
+        {
+            WriteColor(string.Format("[{0}] ", Text), ConsoleColor.Magenta, true);
         }
     }
 }

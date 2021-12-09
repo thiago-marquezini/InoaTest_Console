@@ -17,35 +17,32 @@ namespace InoaTest_Console.Helpers
 
     class B3AtivoMail
     {
-        private string Settings = "appsettings.json";
-        private string Section  = "MailSettings";
-        private SMTPSettings SMTP = new SMTPSettings();
+        private IConfiguration Configuration;
+        private SMTPSettings   SMTP = new SMTPSettings();
+        private SmtpClient     SMTPClient;
 
         public B3AtivoMail(string Settings, string Section)
         {
-            this.Settings = Settings;
-            this.Section  = Section;
+            Configuration = new ConfigurationBuilder().AddJsonFile(Settings, optional: false, reloadOnChange: true).Build();
+            Configuration.GetSection(Section).Bind(SMTP);
+
+            SMTPClient = new SmtpClient(SMTP.SMTPHost)
+            {
+                Port = SMTP.SMTPPort,
+                Credentials = new NetworkCredential(SMTP.SMTPUser, SMTP.SMTPPass),
+                EnableSsl = SMTP.SMTPSSL
+            };
         }
 
         public void Send(string Title, string Message)
         {
             try
             {
-                IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile(Settings, optional: false, reloadOnChange: true).Build();
-                Configuration.GetSection(Section).Bind(SMTP);
-
-                var SMTPClient = new SmtpClient(SMTP.SMTPHost)
-                {
-                    Port = SMTP.SMTPPort,
-                    Credentials = new NetworkCredential(SMTP.SMTPUser, SMTP.SMTPPass),
-                    EnableSsl = SMTP.SMTPSSL
-                };
-
                 SMTPClient.Send(SMTP.SMTPUser, SMTP.Destinatario, Title, Message);
 
             } catch (Exception E)
             {
-                throw new ArgumentException(E.Message);
+                throw new ArgumentException("Mail: " + E.Message);
             }
         }
     }

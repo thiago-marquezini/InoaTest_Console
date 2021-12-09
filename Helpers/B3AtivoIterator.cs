@@ -10,9 +10,9 @@ namespace InoaTest_Console.Helpers
 
         public SymbolArgs(string Symbol, double RefSell, double RefBuy) 
         { 
-            this.symbol  = Symbol; 
-            this.refsell = RefSell; 
-            this.refbuy  = RefBuy; 
+            symbol  = Symbol; 
+            refsell = RefSell; 
+            refbuy  = RefBuy; 
         }
 
         public string Symbol 

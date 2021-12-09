@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using InoaTest_Console.Controllers;
 using InoaTest_Console.Helpers;
 
@@ -12,10 +13,11 @@ namespace InoaTest_Console
         - lendo o config a cada envio (e refazendo o builder) [  Ok  ]
         - a lógica de negócio em um "one liner" pouco legível [  Ok? ]
         - não blindado                                        [  Ok? ]
-        - sem dispose                                         [  x   ]
+        - sem dispose                                         [  Ok? ]
     */
     class Program
     {
+        private static int CheckInterval  = 5; /* Intervalo entre verificacoes (em segundos) */
         private static int SymbolArgCount = 3; /* Argumentos (command-line) por ativo */
         private static B3AtivoController B3AtivosMonitor;
 
@@ -39,7 +41,12 @@ namespace InoaTest_Console
                     }
                 }
 
-                B3AtivosMonitor.Run();
+                while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
+                {
+                    B3AtivosMonitor.Run();
+                    Thread.Sleep(CheckInterval * 1000);
+                }
+                
                 B3AtivosMonitor.Dispose();
 
             } catch (Exception E)

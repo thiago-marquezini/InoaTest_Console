@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using InoaTest_Console.Models;
 using InoaTest_Console.Views;
 using InoaTest_Console.Helpers;
@@ -14,10 +13,8 @@ namespace InoaTest_Console.Controllers
 
     class B3AtivoController : IB3AtivoController, IDisposable
     {
-        private int CheckInterval = 5; /* Intervalo de atualizacao em segundos(s) */
-
         private static B3AtivoView    SymbolView;
-        private static B3AtivoMail    Mail;
+        private static B3AtivoMail    SymbolMail;
         private static Collection     SymbolCollection;
         private static Iterator       SymbolIterator;
 
@@ -25,12 +22,7 @@ namespace InoaTest_Console.Controllers
         {
             SymbolCollection = new Collection();
             SymbolView       = new B3AtivoView();
-            Mail             = new B3AtivoMail("appsettings.json", "MailSettings");
-        }
-
-        ~B3AtivoController()
-        {
-            Dispose();
+            SymbolMail       = new B3AtivoMail("appsettings.json", "MailSettings");
         }
 
         public void AddSymbol(ref SymbolArgs SArgs)
@@ -41,36 +33,30 @@ namespace InoaTest_Console.Controllers
         public void Run()
         {
             SymbolIterator = SymbolCollection.SetupIterator();
-
-            while (true)
+            
+            for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
             {
-                for (SymbolArgs Arg = SymbolIterator.First(); !SymbolIterator.Finished; Arg = SymbolIterator.Next())
+                try
                 {
-                    try
-                    {
-                        B3AtivoModel SBM = new B3AtivoModel(ref Arg, ref Mail);
+                    B3AtivoModel SymbolModel = new B3AtivoModel(ref Arg, ref SymbolMail, ref SymbolView);
 
-                        SBM.RESTWork();
-                        SBM.RESTDisplay(ref SymbolView);
+                    SymbolModel.RESTWork();
+                    SymbolModel.Dispose();
 
-                        SBM.Dispose();
-
-                    } catch (Exception E)
-                    {
-                        throw new ArgumentException("Controller: " + E.Message);
-                    }
+                } catch (Exception E)
+                {
+                    throw new ArgumentException("Controller: " + E.Message);
                 }
-
-                Thread.Sleep(CheckInterval * 1000);
             }
+            
         }
 
         public void Dispose()
         {
-            CheckInterval = 0;
+            SymbolView.WriteText("Disposing B3AtivoController..");
 
             SymbolView       = null;
-            Mail             = null;
+            SymbolMail       = null;
             SymbolCollection = null;
             SymbolIterator   = null;
 

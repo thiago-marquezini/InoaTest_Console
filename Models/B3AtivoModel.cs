@@ -30,7 +30,6 @@ namespace InoaTest_Console.Models
     interface IB3AtivoModel
     {
         void RESTWork();
-        void RESTDisplay(ref B3AtivoView pView);
     }
 
     class B3AtivoModel : IB3AtivoModel, IDisposable
@@ -38,24 +37,23 @@ namespace InoaTest_Console.Models
         private RestClient  Client;
         private RestRequest Request;
 
-        private B3AtivoMail Mail;
         private SymbolArgs  Args;
+        private B3AtivoMail Mail;
+        private B3AtivoView View;
 
         private APIObject ObjectItem;
 
-        private string BaseAPI = "https://api.hgbrasil.com/finance/";
-        private string APIRes  = "stock_price?key=679d092c&symbol=";
-
-        public B3AtivoModel(ref SymbolArgs Args, ref B3AtivoMail Mail)
+        public B3AtivoModel(ref SymbolArgs Args, ref B3AtivoMail Mail, ref B3AtivoView View)
         {
             this.Args = Args;
             this.Mail = Mail;
+            this.View = View;
         }
 
         public void RESTWork()
         {
-            Client = new RestClient(BaseAPI);
-            Request = new RestRequest(APIRes + Args.Symbol);
+            Client  = new RestClient("https://api.hgbrasil.com/finance/");
+            Request = new RestRequest("stock_price?key=679d092c&symbol=" + Args.Symbol);
 
             try
             {
@@ -78,9 +76,11 @@ namespace InoaTest_Console.Models
                             break;
                     }
 
+                    View.Print(ObjectItem.results[Args.Symbol]);
+
                 } else 
                 { 
-                    throw new ArgumentException("Invalid symbol object"); 
+                    throw new ArgumentException("Model: Invalid symbol object"); 
                 }
 
             } catch (Exception E)
@@ -89,22 +89,17 @@ namespace InoaTest_Console.Models
             }
         }
 
-        public void RESTDisplay(ref B3AtivoView pView)
-        {
-            pView.Print(ObjectItem.results[Args.Symbol]);
-        }
-
         public void Dispose()
         {
+            View.WriteText("Disposing B3AtivoModel: " + Args.Symbol);
+
             Client  = null;
             Request = null;
-            Mail    = null;
             Args    = null;
+            View    = null;
+            Mail    = null;
 
             ObjectItem = null;
-
-            BaseAPI = null;
-            APIRes  = null;
 
             GC.SuppressFinalize(this);
         }
