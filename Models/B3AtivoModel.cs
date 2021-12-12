@@ -9,6 +9,12 @@ namespace InoaTest_Console.Models
 {
     enum B3AtivoAction { Vender, Comprar, Ignorar }
 
+    class APISettings
+    {
+        public string BaseURL { get; set; }
+        public string Resource { get; set; }
+    }
+
     class APIObjectItem
     {
         public string symbol { get; set; }
@@ -39,14 +45,16 @@ namespace InoaTest_Console.Models
         private RestClient  Client;
         private RestRequest Request;
 
+        private APISettings API;
         private SymbolArgs  Args;
         private B3AtivoMail Mail;
         private B3AtivoView View;
 
         private APIObject ObjectItem;
 
-        public B3AtivoModel(ref SymbolArgs Args, ref B3AtivoMail Mail, ref B3AtivoView View)
+        public B3AtivoModel(ref SymbolArgs Args, ref B3AtivoMail Mail, ref B3AtivoView View, ref APISettings API)
         {
+            this.API  = API;
             this.Args = Args;
             this.Mail = Mail;
             this.View = View;
@@ -54,8 +62,8 @@ namespace InoaTest_Console.Models
 
         public void GetAssetData()
         {
-            Client  = new RestClient("https://api.hgbrasil.com/finance/");
-            Request = new RestRequest("stock_price?key=e33c0784&symbol=" + Args.Symbol);
+            Client  = new RestClient(API.BaseURL);
+            Request = new RestRequest(API.Resource + Args.Symbol);
 
             try
             {
@@ -98,6 +106,7 @@ namespace InoaTest_Console.Models
         {
             Client  = null;
             Request = null;
+            API     = null;
             Args    = null;
             Mail    = null;
             View    = null;

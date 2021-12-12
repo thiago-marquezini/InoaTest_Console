@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Diagnostics;
+
+using Microsoft.Extensions.Configuration;
+
+using InoaTest_Console.Models;
 using InoaTest_Console.Controllers;
 using InoaTest_Console.Helpers;
-using Microsoft.Extensions.Configuration;
 
 namespace InoaTest_Console
 {
@@ -15,6 +18,7 @@ namespace InoaTest_Console
         private static B3AtivoController B3AtivosMonitor;
         private static IConfiguration    Configuration;
         private static SMTPSettings      SMTP = new SMTPSettings();
+        private static APISettings       API  = new APISettings();
 
         static void Main(string[] args)
         {
@@ -40,9 +44,13 @@ namespace InoaTest_Console
             IConfigurationSection GeneralSection = Configuration.GetSection("General");
             CheckInterval = GeneralSection.GetValue<int>("CheckInterval");
 
+            /* API */
+            Configuration.GetSection("APISettings").Bind(API);
+            B3AtivosMonitor.SetAPI(ref API);
+
             /* Mail */
             Configuration.GetSection("MailSettings").Bind(SMTP);
-            B3AtivosMonitor.SetMail(SMTP);
+            B3AtivosMonitor.SetMail(ref SMTP);
 
             /* Assets */
             IConfigurationSection AssetsSection = Configuration.GetSection("Assets");
@@ -72,8 +80,9 @@ namespace InoaTest_Console
             B3AtivosMonitor.Dispose();
 
             B3AtivosMonitor = null;
-            Configuration = null;
-            SMTP = null;
+            Configuration   = null;
+            SMTP            = null;
+            API             = null;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace InoaTest_Console.Controllers
 
     class B3AtivoController : IB3AtivoController, IDisposable
     {
+        private static APISettings    API;
         private static B3AtivoView    SymbolView;
         private static B3AtivoMail    SymbolMail;
         private static Collection     SymbolCollection;
@@ -25,7 +26,12 @@ namespace InoaTest_Console.Controllers
             SymbolView       = new B3AtivoView();
         }
 
-        public void SetMail(SMTPSettings refSMTP)
+        public void SetAPI(ref APISettings refAPI)
+        {
+            API = refAPI;
+        }
+
+        public void SetMail(ref SMTPSettings refSMTP)
         {
             SymbolMail = new B3AtivoMail(refSMTP);
         }
@@ -43,7 +49,7 @@ namespace InoaTest_Console.Controllers
             {
                 try
                 {
-                    B3AtivoModel SymbolModel = new B3AtivoModel(ref Arg, ref SymbolMail, ref SymbolView);
+                    B3AtivoModel SymbolModel = new B3AtivoModel(ref Arg, ref SymbolMail, ref SymbolView, ref API);
 
                     SymbolModel.GetAssetData();
                     SymbolModel.PrintAsset();
@@ -58,6 +64,7 @@ namespace InoaTest_Console.Controllers
 
         public void Dispose()
         {
+            API              = null;
             SymbolView       = null;
             SymbolMail       = null;
             SymbolCollection = null;
