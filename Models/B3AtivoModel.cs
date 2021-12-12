@@ -29,7 +29,9 @@ namespace InoaTest_Console.Models
 
     interface IB3AtivoModel
     {
-        void APIRequest();
+        void GetAssetData();
+        void PrintAsset();
+        void Dispose();
     }
 
     class B3AtivoModel : IB3AtivoModel, IDisposable
@@ -50,7 +52,7 @@ namespace InoaTest_Console.Models
             this.View = View;
         }
 
-        public void APIRequest()
+        public void GetAssetData()
         {
             Client  = new RestClient("https://api.hgbrasil.com/finance/");
             Request = new RestRequest("stock_price?key=e33c0784&symbol=" + Args.Symbol);
@@ -76,8 +78,6 @@ namespace InoaTest_Console.Models
                             break;
                     }
 
-                    View.Print(ObjectItem.results[Args.Symbol]);
-
                 } else 
                 { 
                     throw new ArgumentException("Model: Invalid symbol object"); 
@@ -89,15 +89,18 @@ namespace InoaTest_Console.Models
             }
         }
 
+        public void PrintAsset()
+        {
+            View.Print(ObjectItem.results[Args.Symbol]);
+        }
+
         public void Dispose()
         {
-            View.WriteText("Disposing B3AtivoModel (" + Args.Symbol + ").");
-
             Client  = null;
             Request = null;
             Args    = null;
-            View    = null;
             Mail    = null;
+            View    = null;
 
             ObjectItem = null;
 

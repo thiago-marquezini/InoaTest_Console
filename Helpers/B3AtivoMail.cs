@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
 
 namespace InoaTest_Console.Helpers
 {
@@ -17,14 +16,12 @@ namespace InoaTest_Console.Helpers
 
     class B3AtivoMail
     {
-        private IConfiguration Configuration;
-        private SMTPSettings   SMTP = new SMTPSettings();
+        private SMTPSettings   SMTP;
         private SmtpClient     SMTPClient;
 
-        public B3AtivoMail(string Settings, string Section)
+        public B3AtivoMail(SMTPSettings refSMTP)
         {
-            Configuration = new ConfigurationBuilder().AddJsonFile(Settings, optional: false, reloadOnChange: true).Build();
-            Configuration.GetSection(Section).Bind(SMTP);
+            SMTP = refSMTP;
 
             SMTPClient = new SmtpClient(SMTP.SMTPHost)
             {

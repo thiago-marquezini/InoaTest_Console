@@ -9,6 +9,7 @@ namespace InoaTest_Console.Controllers
     {
         void AddSymbol(ref SymbolArgs SArgs);
         void Run();
+        void Dispose();
     }
 
     class B3AtivoController : IB3AtivoController, IDisposable
@@ -22,7 +23,11 @@ namespace InoaTest_Console.Controllers
         {
             SymbolCollection = new Collection();
             SymbolView       = new B3AtivoView();
-            SymbolMail       = new B3AtivoMail("appsettings.json", "MailSettings");
+        }
+
+        public void SetMail(SMTPSettings refSMTP)
+        {
+            SymbolMail = new B3AtivoMail(refSMTP);
         }
 
         public void AddSymbol(ref SymbolArgs SArgs)
@@ -40,7 +45,8 @@ namespace InoaTest_Console.Controllers
                 {
                     B3AtivoModel SymbolModel = new B3AtivoModel(ref Arg, ref SymbolMail, ref SymbolView);
 
-                    SymbolModel.APIRequest();
+                    SymbolModel.GetAssetData();
+                    SymbolModel.PrintAsset();
                     SymbolModel.Dispose();
 
                 } catch (Exception E)
@@ -52,13 +58,12 @@ namespace InoaTest_Console.Controllers
 
         public void Dispose()
         {
-            SymbolView.WriteText("Disposing B3AtivoController.");
-
             SymbolView       = null;
             SymbolMail       = null;
             SymbolCollection = null;
             SymbolIterator   = null;
 
+            GC.Collect();
             GC.SuppressFinalize(this);
         }
     }
