@@ -16,9 +16,9 @@ namespace InoaTest_Console
         private static int CheckInterval  = 0;
 
         private static B3AtivoController B3AtivosMonitor;
-        private static IConfiguration    Configuration;
         private static SMTPSettings      SMTP = new SMTPSettings();
         private static APISettings       API  = new APISettings();
+        private static IConfiguration    Configuration;
 
         static void Main(string[] args)
         {
