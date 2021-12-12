@@ -1,6 +1,8 @@
 {
   "General": {
-    "CheckInterval": 5  /* 210 = a cada 3.5 minutos */
+    "CheckInterval": 5,  /* Seconds (depends on API daily limit) */
+    "WeekDayMin": 0,     /* 1 = Monday */
+    "WeekDayMax": 6      /* 5 = Friday */
   },
   "APISettings": {
     "BaseURL": "https://api.hgbrasil.com/finance/",
@@ -10,7 +12,7 @@
     "Destinatario": "thiagostmarquezini@gmail.com",
     "SMTPHost": "smtp.gmail.com",
     "SMTPPort": 587,
-    "SMTPUser": "testeinoa2021@gmail.com",
+    "SMTPUser": "testeinoa2021@gmail.com", /* Must enable "less secure apps" */
     "SMTPPass": "13241324@",
     "SMTPSSL": true
   },

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using RestSharp;
+
 using InoaTest_Console.Views;
 using InoaTest_Console.Helpers;
 
@@ -44,13 +45,14 @@ namespace InoaTest_Console.Models
     {
         private RestClient  Client;
         private RestRequest Request;
+        private IRestResponse Response;
 
         private APISettings API;
         private SymbolArgs  Args;
         private B3AtivoMail Mail;
         private B3AtivoView View;
 
-        private APIObject ObjectItem;
+        private APIObject ObjItem;
 
         public B3AtivoModel(ref SymbolArgs Args, ref B3AtivoMail Mail, ref B3AtivoView View, ref APISettings API)
         {
@@ -67,20 +69,20 @@ namespace InoaTest_Console.Models
 
             try
             {
-                IRestResponse RESTResponse = Client.Get(Request);
+                Response = Client.Get(Request);
 
-                ObjectItem = JsonSerializer.Deserialize<APIObject>(RESTResponse.Content);
-                if (!(ObjectItem.results[Args.Symbol] is null))
+                ObjItem = JsonSerializer.Deserialize<APIObject>(Response.Content);
+                if (!(ObjItem.results[Args.Symbol] is null))
                 {
-                    ObjectItem.results[Args.Symbol].Action = ((ObjectItem.results[Args.Symbol].price > Args.RefSell) ? B3AtivoAction.Vender : (ObjectItem.results[Args.Symbol].price < Args.RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
+                    ObjItem.results[Args.Symbol].Action = ((ObjItem.results[Args.Symbol].price > Args.RefSell) ? B3AtivoAction.Vender : (ObjItem.results[Args.Symbol].price < Args.RefBuy) ? B3AtivoAction.Comprar : B3AtivoAction.Ignorar);
 
-                    switch (ObjectItem.results[Args.Symbol].Action)
+                    switch (ObjItem.results[Args.Symbol].Action)
                     {
                         case B3AtivoAction.Vender:
-                            Mail.Send("Recomendação de Venda", string.Format("Recomendamos a venda do ativo {0} ({1}{2})", Args.Symbol, ObjectItem.results[Args.Symbol].currency, ObjectItem.results[Args.Symbol].price));
+                            Mail.Send("Recomendação de Venda", string.Format("Recomendamos a venda do ativo {0} ({1}{2})", Args.Symbol, ObjItem.results[Args.Symbol].currency, ObjItem.results[Args.Symbol].price));
                             break;
                         case B3AtivoAction.Comprar:
-                            Mail.Send("Recomendação de Compra", string.Format("Recomendamos a compra do ativo {0} ({1}{2})", Args.Symbol, ObjectItem.results[Args.Symbol].currency, ObjectItem.results[Args.Symbol].price));
+                            Mail.Send("Recomendação de Compra", string.Format("Recomendamos a compra do ativo {0} ({1}{2})", Args.Symbol, ObjItem.results[Args.Symbol].currency, ObjItem.results[Args.Symbol].price));
                             break;
                         default: 
                             break;
@@ -99,19 +101,20 @@ namespace InoaTest_Console.Models
 
         public void PrintAsset()
         {
-            View.Print(ObjectItem.results[Args.Symbol]);
+            View.Print(ObjItem.results[Args.Symbol]);
         }
 
         public void Dispose()
         {
-            Client  = null;
-            Request = null;
-            API     = null;
-            Args    = null;
-            Mail    = null;
-            View    = null;
+            Client   = null;
+            Request  = null;
+            Response = null;
+            API      = null;
+            Args     = null;
+            Mail     = null;
+            View     = null;
 
-            ObjectItem = null;
+            ObjItem  = null;
 
             GC.Collect();
             GC.SuppressFinalize(this);
