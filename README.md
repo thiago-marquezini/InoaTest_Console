@@ -7,8 +7,8 @@ Features:
 - Accepts multiple symbols at once (check file bin\Release\netcoreapp3.1\0 - InoaTest_Console_Multiple.bat)
 
 Usage:
-> Setup Configuration file: bin\Release\netcoreapp3.1\appsettings.json
-> Run InoaTest_Console.exe
+- Setup Configuration file: bin\Release\netcoreapp3.1\appsettings.json
+- Run InoaTest_Console.exe
 
 External requeriments:
 - RestSharp (for simple REST API calls)
